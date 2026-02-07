@@ -1,0 +1,27 @@
+{
+  "blocks": [
+    {
+      "id": 0,
+      "type": "paragraph",
+      "content": "To start, create a new file called `file-server.ts`."
+    },
+    {
+      "id": 1,
+      "type": "paragraph",
+      "preview": "We'll use Deno's built in [HTTP server](/api/deno/~/Deno.serve) to listen for\nin...",
+      "length": 155
+    },
+    {
+      "id": 2,
+      "type": "code",
+      "preview": "```ts title=\"file-server.ts\"\nDeno.serve(\n  { hostname: \"localhost\", port: 8080 }...",
+      "length": 209
+    },
+    {
+      "id": 3,
+      "type": "blockquote",
+      "preview": "> If you're not familiar with the `URL` object, you can learn more about it in\n>...",
+      "length": 402
+    }
+  ]
+}

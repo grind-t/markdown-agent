@@ -1,8 +1,10 @@
-export function add(a: number, b: number): number {
-  return a + b;
-}
+import { Agent } from "@openai/agents";
+import { fetchDocumentTool } from "./tools/fetch_document.ts";
+import { expandSectionTool } from "./tools/expand_section.ts";
+import { expandBlockTool } from "./tools/expand_block.ts";
 
-// Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
-if (import.meta.main) {
-  console.log("Add 2 + 3 =", add(2, 3));
-}
+export const markdownAgent = new Agent({
+  name: "Markdown agent",
+  instructions: "You are an assistant with markdown documents.",
+  tools: [fetchDocumentTool, expandSectionTool, expandBlockTool],
+});

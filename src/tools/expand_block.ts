@@ -6,17 +6,11 @@ export const expandBlockTool = tool({
   name: "expand_block",
   description: "Expands content of a block",
   parameters: z.object({
-    documentId: z.number(),
     sectionId: z.number(),
     blockId: z.number(),
   }),
-  execute: ({ documentId, sectionId, blockId }, ctx?: MarkdownAgentContext) => {
-    const document = ctx?.context.documents.find((v) => v.id === documentId);
-
-    if (!document) {
-      return "Document not found";
-    }
-
+  execute: ({ sectionId, blockId }, ctx?: MarkdownAgentContext) => {
+    const document = ctx!.context;
     const section = document.sections.find((v) => v.id === sectionId);
 
     if (!section) {

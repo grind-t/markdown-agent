@@ -4,18 +4,11 @@ import { MarkdownSection } from "./markdown_section.ts";
 import { MarkdownBlock } from "./markdown_block.ts";
 import { EMPTY_HEADING } from "./empty_heading.ts";
 
-export type MarkdownDocumentOptions = Readonly<{
-  id: number;
-  text: string;
-}>;
-
 export class MarkdownDocument {
-  readonly id: number;
   readonly ast: Root;
   readonly sections: MarkdownSection[];
 
-  constructor({ id, text }: MarkdownDocumentOptions) {
-    this.id = id;
+  constructor(readonly text: string) {
     this.ast = fromMarkdown(text);
     this.sections = [];
 

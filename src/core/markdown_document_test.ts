@@ -4,10 +4,8 @@ import { MarkdownDocument } from "./markdown_document.ts";
 
 describe("MarkdownDocument", () => {
   it("should split markdown into sections", () => {
-    const document = new MarkdownDocument({
-      id: 0,
-      text: "# Heading\n\nBlock\n\n## Subheading\n\nBlock",
-    });
+    const markdown = "# Heading\n\nBlock\n\n## Subheading\n\nBlock";
+    const document = new MarkdownDocument(markdown);
     const sections = document.sections.map((v) => ({
       heading: v.heading.content,
       blocks: v.content.map((v) => v.content),
@@ -26,10 +24,8 @@ describe("MarkdownDocument", () => {
   });
 
   it("should split markdown without headings into sections", () => {
-    const document = new MarkdownDocument({
-      id: 0,
-      text: "Block 1\n\nBlock 2",
-    });
+    const markdown = "Block 1\n\nBlock 2";
+    const document = new MarkdownDocument(markdown);
     const sections = document.sections.map((v) => ({
       heading: v.heading.content,
       blocks: v.content.map((v) => v.content),

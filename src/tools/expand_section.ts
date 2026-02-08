@@ -5,14 +5,9 @@ import type { MarkdownAgentContext } from "../context.ts";
 export const expandSectionTool = tool({
   name: "expand_section",
   description: "Expands content of a section",
-  parameters: z.object({ documentId: z.number(), sectionId: z.number() }),
-  execute: ({ documentId, sectionId }, ctx?: MarkdownAgentContext) => {
-    const document = ctx?.context.documents.find((v) => v.id === documentId);
-
-    if (!document) {
-      return "Document not found";
-    }
-
+  parameters: z.object({ sectionId: z.number() }),
+  execute: ({ sectionId }, ctx?: MarkdownAgentContext) => {
+    const document = ctx!.context;
     const section = document.sections.find((v) => v.id === sectionId);
 
     if (!section) {

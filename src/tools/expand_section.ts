@@ -43,7 +43,7 @@ export const expandSectionTool = tool({
       iterSiblingSections({
         startIndex: sectionsStart,
         ast,
-        level: heading.depth,
+        level: heading.depth + 1,
       }).map((v) => ({
         id: v.id,
         heading: getBlockContent(markdown, v.heading),

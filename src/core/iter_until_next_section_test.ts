@@ -1,11 +1,11 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
-import { iterBlocksFlat } from "./iter_blocks_flat.ts";
+import { iterUntilNextSection } from "./iter_until_next_section.ts";
 
-describe("iter_blocks_flat", () => {
+describe("iter_until_next_section", () => {
   it("yields nothing for an empty AST", () => {
     const root = { type: "root", children: [] } as any;
-    const got = Array.from(iterBlocksFlat(0, root));
+    const got = Array.from(iterUntilNextSection(0, root));
     assertEquals(got, []);
   });
 
@@ -13,8 +13,8 @@ describe("iter_blocks_flat", () => {
     const p = { type: "paragraph", value: "p1" } as any;
     const root = { type: "root", children: [p] } as any;
 
-    assertEquals(Array.from(iterBlocksFlat(1, root)), []);
-    assertEquals(Array.from(iterBlocksFlat(2, root)), []);
+    assertEquals(Array.from(iterUntilNextSection(1, root)), []);
+    assertEquals(Array.from(iterUntilNextSection(2, root)), []);
   });
 
   it("stops immediately if a heading is at start", () => {
@@ -22,7 +22,7 @@ describe("iter_blocks_flat", () => {
     const p = { type: "paragraph", value: "p1" } as any;
     const root = { type: "root", children: [h, p] } as any;
 
-    assertEquals(Array.from(iterBlocksFlat(0, root)), []);
+    assertEquals(Array.from(iterUntilNextSection(0, root)), []);
   });
 
   it("yields blocks until the next heading and then stops", () => {
@@ -33,7 +33,7 @@ describe("iter_blocks_flat", () => {
 
     const root = { type: "root", children: [p1, p2, h, code] } as any;
 
-    const got = Array.from(iterBlocksFlat(0, root));
+    const got = Array.from(iterUntilNextSection(0, root));
     assertEquals(got, [p1, p2]);
   });
 });

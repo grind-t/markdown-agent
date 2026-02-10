@@ -36,7 +36,7 @@ const serena = new MCPServerStdio({
 const coder = new Agent({
   name: "markdown-agent-project coder",
   instructions,
-  model: "gpt-5-mini",
+  model: "gpt-5.2",
   modelSettings: {
     text: { verbosity: "low" },
   },

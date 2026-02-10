@@ -4,7 +4,7 @@ import type { MarkdownAgentContext } from "../context.ts";
 import { iterSiblingSections } from "../core/iter_sibling_sections.ts";
 import { getBlockContent } from "../core/get_block_content.ts";
 import { getSectionContentLength } from "../core/get_section_content_length.ts";
-import { iterBlocksFlat } from "../core/iter_blocks_flat.ts";
+import { iterUntilNextSection } from "../core/iter_until_next_section.ts";
 
 export const expandSectionTool = tool({
   name: "expand_section",
@@ -20,7 +20,7 @@ export const expandSectionTool = tool({
 
     const blocksStart = sectionId + 1;
     const blocks = Array.from(
-      iterBlocksFlat(blocksStart, ast).map((v, i) => {
+      iterUntilNextSection(blocksStart, ast).map((v, i) => {
         const type = v.type;
         const content = getBlockContent(markdown, v);
         const { length } = content;

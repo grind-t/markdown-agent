@@ -2,18 +2,18 @@ import { describe, it } from "@std/testing/bdd";
 import { run } from "@openai/agents";
 import { markdownAgent } from "./main.ts";
 import { assert, assertStringIncludes } from "@std/assert";
-import { MarkdownDocument } from "./core/markdown_document.ts";
+import { markdownAgentContext } from "./context.ts";
 
 describe("MarkdownAgent", () => {
   it("should find simple Deno API server example", async () => {
     const url = "https://docs.deno.com/llms.txt";
     const markdown = await fetch(url).then((v) => v.text());
-    const document = new MarkdownDocument(markdown);
+    const context = markdownAgentContext(markdown);
 
     const result = await run(
       markdownAgent,
       "Find url with simple Deno API server example",
-      { context: document },
+      { context },
     );
 
     assert(result.finalOutput);

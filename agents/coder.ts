@@ -37,6 +37,9 @@ const coder = new Agent({
   name: "markdown-agent-project coder",
   instructions,
   model: "gpt-5-mini",
+  modelSettings: {
+    text: { verbosity: "low" },
+  },
   mcpServers: [serena],
 });
 

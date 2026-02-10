@@ -1,18 +1,20 @@
 {
-  "name": "@grind-t/markdown-agent",
-  "version": "0.1.0",
-  "license": "MIT",
-  "exports": "./src/main.ts",
-  "tasks": {
-    "dev": "deno run --watch -N -E -R -W --env-file ./src/main_dev.ts"
-  },
-  "imports": {
-    "@grind-t/agents-as-ui": "jsr:@grind-t/agents-as-ui@^0.1.2",
-    "@openai/agents": "npm:@openai/agents@^0.4.4",
-    "@std/assert": "jsr:@std/assert@1",
-    "@std/testing": "jsr:@std/testing@^1.0.17",
-    "mdast": "npm:@types/mdast@^4.0.4",
-    "mdast-util-from-markdown": "npm:mdast-util-from-markdown@^2.0.2",
-    "zod": "npm:zod@^4.3.6"
-  }
+    "name": "@grind-t/markdown-agent",
+    "version": "0.1.0",
+    "license": "MIT",
+    "exports": "./src/main.ts",
+    "tasks": {
+        "code": "deno run -A --env-file ./agents/coder.ts",
+        "dev": "deno run --watch -N -E -R -W --env-file ./src/main_dev.ts"
+    },
+    "imports": {
+        "@grind-t/agents-as-cli": "jsr:@grind-t/agents-as-cli@^0.1.0",
+        "@grind-t/agents-as-ui": "jsr:@grind-t/agents-as-ui@^0.1.2",
+        "@openai/agents": "npm:@openai/agents@^0.4.4",
+        "@std/assert": "jsr:@std/assert@1",
+        "@std/testing": "jsr:@std/testing@^1.0.17",
+        "mdast": "npm:@types/mdast@^4.0.4",
+        "mdast-util-from-markdown": "npm:mdast-util-from-markdown@^2.0.2",
+        "zod": "npm:zod@^4.3.6"
+    }
 }

@@ -1,6 +1,7 @@
 {
   "version": "5",
   "specifiers": {
+    "jsr:@grind-t/agents-as-cli@0.1": "0.1.0",
     "jsr:@grind-t/agents-as-ui@~0.1.2": "0.1.2",
     "jsr:@std/assert@1": "1.0.18",
     "jsr:@std/assert@^1.0.17": "1.0.18",
@@ -28,6 +29,9 @@
     "npm:zod@^4.3.6": "4.3.6"
   },
   "jsr": {
+    "@grind-t/agents-as-cli@0.1.0": {
+      "integrity": "77e2f6e4ccdd85736bbc3e25319f34505765dfb8b5591216ead1f879ee75a792"
+    },
     "@grind-t/agents-as-ui@0.1.2": {
       "integrity": "49baa9217e50b94671f2262f8339a8883e5f9935db5e3e68e6ed251dbb43b8a0",
       "dependencies": [
@@ -971,6 +975,7 @@
   },
   "workspace": {
     "dependencies": [
+      "jsr:@grind-t/agents-as-cli@0.1",
       "jsr:@grind-t/agents-as-ui@~0.1.2",
       "jsr:@std/assert@1",
       "jsr:@std/testing@^1.0.17",

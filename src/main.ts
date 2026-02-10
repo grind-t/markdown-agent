@@ -1,7 +1,7 @@
 import { Agent } from "@openai/agents";
 import { expandSectionTool } from "./tools/expand_section.ts";
 import { expandBlockTool } from "./tools/expand_block.ts";
-import { iterSectionsFlat } from "./core/iter_sections_flat.ts";
+import { iterSiblingSections } from "./core/iter_sibling_sections.ts";
 import { getBlockContent } from "./core/get_block_content.ts";
 import { getSectionContentLength } from "./core/get_section_content_length.ts";
 
@@ -10,7 +10,7 @@ export const markdownAgent = new Agent({
   instructions: (ctx) => {
     const { markdown, ast } = ctx.context!;
     const sections = Array.from(
-      iterSectionsFlat(0, ast).map((v) => ({
+      iterSiblingSections({ startIndex: 0, ast, level: 1 }).map((v) => ({
         id: v.id,
         heading: getBlockContent(markdown, v.heading),
         contentLength: getSectionContentLength(v),

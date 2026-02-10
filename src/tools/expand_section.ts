@@ -1,7 +1,7 @@
 import { tool } from "@openai/agents";
 import { z } from "zod";
 import type { MarkdownAgentContext } from "../context.ts";
-import { iterSectionsFlat } from "../core/iter_sections_flat.ts";
+import { iterSiblingSections } from "../core/iter_sibling_sections.ts";
 import { getBlockContent } from "../core/get_block_content.ts";
 import { getSectionContentLength } from "../core/get_section_content_length.ts";
 import { iterBlocksFlat } from "../core/iter_blocks_flat.ts";
@@ -12,8 +12,9 @@ export const expandSectionTool = tool({
   parameters: z.object({ sectionId: z.number() }),
   execute: ({ sectionId }, ctx?: MarkdownAgentContext) => {
     const { markdown, ast } = ctx!.context;
+    const heading = ast.children[sectionId];
 
-    if (ast.children[sectionId]?.type !== "heading") {
+    if (heading?.type !== "heading") {
       return "Section not found";
     }
 
@@ -39,7 +40,11 @@ export const expandSectionTool = tool({
 
     const sectionsStart = blocksStart + blocks.length;
     const sections = Array.from(
-      iterSectionsFlat(sectionsStart, ast).map((v) => ({
+      iterSiblingSections({
+        startIndex: sectionsStart,
+        ast,
+        level: heading.depth,
+      }).map((v) => ({
         id: v.id,
         heading: getBlockContent(markdown, v.heading),
         contentLength: getSectionContentLength(v),

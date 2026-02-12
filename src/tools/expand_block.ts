@@ -1,7 +1,7 @@
 import { tool } from "@openai/agents";
 import { z } from "zod";
 import type { MarkdownAgentContext } from "../context.ts";
-import { getBlockContent } from "../core/get_block_content.ts";
+import { getBlockContent } from "../core/ast/get_block_content.ts";
 
 export const expandBlockTool = tool({
   name: "expand_block",

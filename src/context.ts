@@ -1,7 +1,7 @@
 import type { RunContext } from "@openai/agents";
 import type { Root } from "mdast";
 import { fromMarkdown } from "mdast-util-from-markdown";
-import { EMPTY_HEADING } from "./core/empty_heading.ts";
+import { EMPTY_HEADING } from "./core/ast/empty_heading.ts";
 
 export type MarkdownAgentContext = RunContext<{
   markdown: string;

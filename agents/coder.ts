@@ -51,7 +51,7 @@ try {
 
   while ((prompt = multilinePrompt(">"))) {
     history.push(user(prompt));
-    const response = await run(coder, history);
+    const response = await run(coder, history, { maxTurns: 50 });
     history = response.history;
   }
 } finally {

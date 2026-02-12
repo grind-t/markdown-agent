@@ -1,9 +1,9 @@
 import { Agent } from "@openai/agents";
 import { expandSectionTool } from "./tools/expand_section.ts";
 import { expandBlockTool } from "./tools/expand_block.ts";
-import { iterSiblingSections } from "./core/iter_sibling_sections.ts";
-import { getBlockContent } from "./core/get_block_content.ts";
-import { getSectionContentLength } from "./core/get_section_content_length.ts";
+import { iterSiblingSections } from "./core/ast/iter_sibling_sections.ts";
+import { getBlockContent } from "./core/ast/get_block_content.ts";
+import { getSectionContentLength } from "./core/ast/get_section_content_length.ts";
 
 export const markdownAgent = new Agent({
   name: "Markdown agent",

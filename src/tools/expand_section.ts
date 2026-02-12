@@ -1,10 +1,10 @@
 import { tool } from "@openai/agents";
 import { z } from "zod";
 import type { MarkdownAgentContext } from "../context.ts";
-import { iterSiblingSections } from "../core/iter_sibling_sections.ts";
-import { getBlockContent } from "../core/get_block_content.ts";
-import { getSectionContentLength } from "../core/get_section_content_length.ts";
-import { iterUntilNextSection } from "../core/iter_until_next_section.ts";
+import { iterSiblingSections } from "../core/ast/iter_sibling_sections.ts";
+import { getBlockContent } from "../core/ast/get_block_content.ts";
+import { getSectionContentLength } from "../core/ast/get_section_content_length.ts";
+import { iterUntilNextSection } from "../core/ast/iter_until_next_section.ts";
 
 export const expandSectionTool = tool({
   name: "expand_section",

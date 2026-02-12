@@ -36,7 +36,7 @@ const serena = new MCPServerStdio({
 const coder = new Agent({
   name: "markdown-agent-project coder",
   instructions,
-  model: "gpt-5.2",
+  model: "gpt-5-mini",
   modelSettings: {
     text: { verbosity: "low" },
   },
@@ -52,7 +52,6 @@ try {
   while ((prompt = multilinePrompt(">"))) {
     history.push(user(prompt));
     const response = await run(coder, history);
-    console.log(response.finalOutput);
     history = response.history;
   }
 } finally {

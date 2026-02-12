@@ -8,8 +8,7 @@ import type { Root, RootContent } from "mdast";
  * @yields RootContent - blocks (paragraph, code, html, etc.) until the next heading
  */
 export function* iterUntilNextSection(
-  startIndex: number,
-  ast: Root,
+  { startIndex, ast }: { startIndex: number; ast: Root },
 ): Generator<RootContent> {
   for (let i = startIndex; i < ast.children.length; i++) {
     const block = ast.children[i];

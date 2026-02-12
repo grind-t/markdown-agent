@@ -20,7 +20,7 @@ export const expandSectionTool = tool({
 
     const blocksStart = sectionId + 1;
     const blocks = Array.from(
-      iterUntilNextSection(blocksStart, ast).map((v, i) => {
+      iterUntilNextSection({ startIndex: blocksStart, ast }).map((v, i) => {
         const type = v.type;
         const content = getBlockContent(markdown, v);
         const { length } = content;

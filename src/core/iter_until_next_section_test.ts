@@ -5,7 +5,7 @@ import { iterUntilNextSection } from "./iter_until_next_section.ts";
 describe("iter_until_next_section", () => {
   it("yields nothing for an empty AST", () => {
     const root = { type: "root", children: [] } as any;
-    const got = Array.from(iterUntilNextSection(0, root));
+    const got = Array.from(iterUntilNextSection({ startIndex: 0, ast: root }));
     assertEquals(got, []);
   });
 
@@ -13,8 +13,8 @@ describe("iter_until_next_section", () => {
     const p = { type: "paragraph", value: "p1" } as any;
     const root = { type: "root", children: [p] } as any;
 
-    assertEquals(Array.from(iterUntilNextSection(1, root)), []);
-    assertEquals(Array.from(iterUntilNextSection(2, root)), []);
+    assertEquals(Array.from(iterUntilNextSection({ startIndex: 1, ast: root })), []);
+    assertEquals(Array.from(iterUntilNextSection({ startIndex: 2, ast: root })), []);
   });
 
   it("stops immediately if a heading is at start", () => {
@@ -22,7 +22,7 @@ describe("iter_until_next_section", () => {
     const p = { type: "paragraph", value: "p1" } as any;
     const root = { type: "root", children: [h, p] } as any;
 
-    assertEquals(Array.from(iterUntilNextSection(0, root)), []);
+    assertEquals(Array.from(iterUntilNextSection({ startIndex: 0, ast: root })), []);
   });
 
   it("yields blocks until the next heading and then stops", () => {
@@ -33,7 +33,7 @@ describe("iter_until_next_section", () => {
 
     const root = { type: "root", children: [p1, p2, h, code] } as any;
 
-    const got = Array.from(iterUntilNextSection(0, root));
+    const got = Array.from(iterUntilNextSection({ startIndex: 0, ast: root }));
     assertEquals(got, [p1, p2]);
   });
 });

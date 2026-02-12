@@ -1,10 +1,5 @@
-import type { Heading, Root, RootContent } from "mdast";
-
-export type Section = {
-  id: number;
-  heading: Heading;
-  content: RootContent[];
-};
+import type { Root, RootContent } from "mdast";
+import type { Section } from "./types.ts";
 
 export type IterSiblingSectionsOptions = {
   ast: Root;

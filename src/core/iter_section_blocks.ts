@@ -8,7 +8,7 @@ export type IterSectionBlocksInput = {
 
 export function* iterSectionBlocks(
   { ast, headingIndex }: IterSectionBlocksInput,
-): Generator<RootContent> {
+): Generator<[RootContent, number]> {
   const heading = ast.children[headingIndex];
 
   assert(heading.type === "heading");
@@ -20,6 +20,6 @@ export function* iterSectionBlocks(
       break;
     }
 
-    yield block;
+    yield [block, i];
   }
 }

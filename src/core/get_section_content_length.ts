@@ -10,8 +10,8 @@ export function getSectionContentLength(
   input: GetSectionContentLengthInput,
 ): number {
   const blocks = Array.from(iterSectionBlocks(input));
-  const start = blocks.at(0)?.position?.start.offset ?? 0;
-  const end = blocks.at(-1)?.position?.end.offset ?? 0;
+  const start = blocks.at(0)?.[0]?.position?.start.offset ?? 0;
+  const end = blocks.at(-1)?.[0]?.position?.end.offset ?? 0;
 
   return end - start;
 }

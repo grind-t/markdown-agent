@@ -22,7 +22,7 @@ describe("iterSectionBlocks", () => {
     const root = { type: "root", children: [h0, p1, h_deeper, p2, h1] } as any;
 
     const got = Array.from(iterSectionBlocks({ ast: root, headingIndex: 0 }));
-    assertEquals(got, [p1, h_deeper, p2]);
+    assertEquals(got, [[p1, 1], [h_deeper, 2], [p2, 3]]);
   });
 
   it("stops when encountering a same-level heading", () => {
@@ -33,7 +33,7 @@ describe("iterSectionBlocks", () => {
     const root = { type: "root", children: [h0, p, h1] } as any;
 
     const got = Array.from(iterSectionBlocks({ ast: root, headingIndex: 0 }));
-    assertEquals(got, [p]);
+    assertEquals(got, [[p, 1]]);
   });
 
   it("stops when encountering a higher-level heading", () => {
@@ -45,6 +45,6 @@ describe("iterSectionBlocks", () => {
     const root = { type: "root", children: [h0, p, hHigher, later] } as any;
 
     const got = Array.from(iterSectionBlocks({ ast: root, headingIndex: 0 }));
-    assertEquals(got, [p]);
+    assertEquals(got, [[p, 1]]);
   });
 });

@@ -1,4 +1,4 @@
-import { fromMarkdown } from "mdast-util-from-markdown";
+/*import { fromMarkdown } from "mdast-util-from-markdown";
 import { iterSiblingSections } from "./src/core/ast/iter_sibling_sections.ts";
 import { getNodeContent } from "./src/core/ast/get_node_content.ts";
 import { getSectionContentLength } from "./src/core/ast/get_section_content_length.ts";
@@ -113,7 +113,7 @@ for (let i = 0; i < 1; i++) {
   );
 }
 
-console.log(JSON.stringify(elements, null, 2));*/
+console.log(JSON.stringify(elements, null, 2));
 
 function tab(content: string) {
   return content.split("\n").map((line) =>
@@ -162,4 +162,4 @@ function expand(sectionId: number) {
   })).forEach((v) => elements.push(v));
 
   return elements;
-}
+  }*/

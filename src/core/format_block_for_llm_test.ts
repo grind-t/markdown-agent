@@ -1,37 +1,30 @@
+// deno-lint-ignore-file no-explicit-any
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
-import { fromMarkdown } from "mdast-util-from-markdown";
-import type { RootContent } from "mdast";
-import { formatBlockForLlm } from "./format_block_for_llm.ts";
+import { formatBlockForLLM } from "./format_block_for_llm.ts";
 
-describe("formatBlockForLlm", () => {
-  it("returns content when block content is short", () => {
-    const markdown = "Hello World";
-    const ast = fromMarkdown(markdown);
-    const block = ast.children[0] as RootContent;
+describe("formatBlockForLLM", () => {
+  it("returns full content when length is below preview limit", () => {
+    const markdown = "short content";
+    const block = {
+      position: { start: { offset: 0 }, end: { offset: markdown.length } },
+    } as any;
 
-    const result = formatBlockForLlm({ id: 0, block, markdown });
-
-    assertEquals(result, {
-      id: 0,
-      type: block.type,
-      content: "Hello World",
-    });
+    const got = formatBlockForLLM({ markdown, block, index: 0 });
+    assertEquals(got, markdown);
   });
 
-  it("returns preview and length when block content exceeds preview limit", () => {
-    const longContent = "a".repeat(90);
-    const markdown = longContent;
-    const ast = fromMarkdown(markdown);
-    const block = ast.children[0] as RootContent;
+  it("returns preview and comment when content exceeds preview limit", () => {
+    const content = "a".repeat(100);
+    const markdown = content;
+    const block = {
+      position: { start: { offset: 0 }, end: { offset: markdown.length } },
+    } as any;
 
-    const result = formatBlockForLlm({ id: 1, block, markdown });
+    const got = formatBlockForLLM({ markdown, block, index: 3 });
+    const preview = content.slice(0, 80);
+    const expected = `${preview}...\n<!-- id: 3, length: ${content.length} -->`;
 
-    assertEquals(result, {
-      id: 1,
-      type: block.type,
-      preview: longContent.slice(0, 80),
-      length: 90,
-    });
+    assertEquals(got, expected);
   });
 });

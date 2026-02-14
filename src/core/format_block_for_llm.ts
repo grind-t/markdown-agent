@@ -1,39 +1,24 @@
 import type { RootContent } from "mdast";
 import { getBlockContent } from "./get_block_content.ts";
 
-export type FormatBlockForLlmOutput = {
-  id: number;
-  type: RootContent["type"];
-  content?: string;
-  preview?: string;
-  length?: number;
-};
-
-export type FormatBlockForLlmInput = {
-  id: number;
-  block: RootContent;
+export type FormatBlockForLLMInput = {
   markdown: string;
+  block: RootContent;
+  index: number;
 };
 
 const PREVIEW_LIMIT = 80;
 
-export function formatBlockForLlm(
-  { id, block, markdown }: FormatBlockForLlmInput,
-): FormatBlockForLlmOutput {
+export function formatBlockForLLM(
+  { markdown, block, index }: FormatBlockForLLMInput,
+): string {
   const content = getBlockContent(markdown, block);
 
   if (content.length > PREVIEW_LIMIT) {
-    return {
-      id,
-      type: block.type,
-      preview: content.slice(0, PREVIEW_LIMIT),
-      length: content.length,
-    };
+    const comment = `<!-- id: ${index}, length: ${content.length} -->`;
+    const preview = content.slice(0, PREVIEW_LIMIT);
+    return `${preview}...\n${comment}`;
   }
 
-  return {
-    id,
-    type: block.type,
-    content,
-  };
+  return content;
 }

@@ -53,6 +53,7 @@ try {
     history.push(user(prompt));
     const response = await run(coder, history, { maxTurns: 50 });
     history = response.history;
+    console.log(response.finalOutput);
   }
 } finally {
   await serena.close();

@@ -3,14 +3,14 @@ import type { Root } from "mdast";
 import { getSectionContentLength } from "./get_section_content_length.ts";
 import { getBlockContent } from "./get_block_content.ts";
 
-export type FormatSubSectionForLLMInput = {
+export type GetSectionPreviewInput = {
   markdown: string;
   ast: Root;
   headingIndex: number;
 };
 
-export function formatSubSectionForLLM(
-  { markdown, ast, headingIndex }: FormatSubSectionForLLMInput,
+export function getSectionPreview(
+  { markdown, ast, headingIndex }: GetSectionPreviewInput,
 ): string {
   const heading = ast.children[headingIndex];
 

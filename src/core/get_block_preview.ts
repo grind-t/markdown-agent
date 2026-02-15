@@ -1,7 +1,7 @@
 import type { RootContent } from "mdast";
 import { getBlockContent } from "./get_block_content.ts";
 
-export type FormatBlockForLLMInput = {
+export type GetBlockPreviewInput = {
   markdown: string;
   block: RootContent;
   index: number;
@@ -9,8 +9,8 @@ export type FormatBlockForLLMInput = {
 
 const PREVIEW_LIMIT = 80;
 
-export function formatBlockForLLM(
-  { markdown, block, index }: FormatBlockForLLMInput,
+export function getBlockPreview(
+  { markdown, block, index }: GetBlockPreviewInput,
 ): string {
   const content = getBlockContent(markdown, block);
 

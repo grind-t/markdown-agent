@@ -1,16 +1,16 @@
 // deno-lint-ignore-file no-explicit-any
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
-import { formatBlockForLLM } from "./format_block_for_llm.ts";
+import { getBlockPreview } from "./get_block_preview.ts";
 
-describe("formatBlockForLLM", () => {
+describe("getBlockPreview", () => {
   it("returns full content when length is below preview limit", () => {
     const markdown = "short content";
     const block = {
       position: { start: { offset: 0 }, end: { offset: markdown.length } },
     } as any;
 
-    const got = formatBlockForLLM({ markdown, block, index: 0 });
+    const got = getBlockPreview({ markdown, block, index: 0 });
     assertEquals(got, markdown);
   });
 
@@ -21,7 +21,7 @@ describe("formatBlockForLLM", () => {
       position: { start: { offset: 0 }, end: { offset: markdown.length } },
     } as any;
 
-    const got = formatBlockForLLM({ markdown, block, index: 3 });
+    const got = getBlockPreview({ markdown, block, index: 3 });
     const preview = content.slice(0, 80);
     const expected = `${preview}...\n<!-- id: 3, length: ${content.length} -->`;
 

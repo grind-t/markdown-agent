@@ -1,9 +1,9 @@
 // deno-lint-ignore-file no-explicit-any
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
-import { formatSubSectionForLLM } from "./format_sub_section_for_llm.ts";
+import { getSectionPreview } from "./get_section_preview.ts";
 
-describe("formatSubSectionForLLM", () => {
+describe("getSectionPreview", () => {
   it("formats a heading with no content", () => {
     const markdown = "# Title\n";
     const h0 = {
@@ -15,7 +15,7 @@ describe("formatSubSectionForLLM", () => {
 
     const root = { type: "root", children: [h0] } as any;
 
-    const got = formatSubSectionForLLM({
+    const got = getSectionPreview({
       markdown,
       ast: root,
       headingIndex: 0,
@@ -50,7 +50,7 @@ describe("formatSubSectionForLLM", () => {
 
     const root = { type: "root", children: [h0, p, h1] } as any;
 
-    const got = formatSubSectionForLLM({
+    const got = getSectionPreview({
       markdown,
       ast: root,
       headingIndex: 0,

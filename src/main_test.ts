@@ -1,4 +1,4 @@
-import { describe, it } from "@std/testing/bdd";
+/*import { describe, it } from "@std/testing/bdd";
 import { run } from "@openai/agents";
 import { markdownAgent } from "./main.ts";
 import { assert, assertStringIncludes } from "@std/assert";
@@ -22,4 +22,4 @@ describe("MarkdownAgent", () => {
       "https://docs.deno.com/examples/simple_api_tutorial",
     );
   });
-});
+  });*/

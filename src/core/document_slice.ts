@@ -1,6 +1,6 @@
 import type { Root } from "mdast";
 
-export class AstSlice {
+export class DocumentSlice {
   readonly indices: number[] = [];
 
   constructor(readonly ast: Root) {}

@@ -1,15 +1,15 @@
 // deno-lint-ignore-file no-explicit-any
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
-import { AstSlice } from "./ast_slice.ts";
+import { DocumentSlice } from "./document_slice.ts";
 
 function makeRoot(children: any[] = []) {
   return { type: "root", children } as any;
 }
 
-describe("AstSlice.addBlock", () => {
+describe("DocumentSlice.addBlock", () => {
   it("appends when index is greater than all existing", () => {
-    const slice = new AstSlice(makeRoot());
+    const slice = new DocumentSlice(makeRoot());
     slice.addBlock(1);
     slice.addBlock(3);
     slice.addBlock(5);
@@ -18,7 +18,7 @@ describe("AstSlice.addBlock", () => {
   });
 
   it("prepends when index is smaller than all existing", () => {
-    const slice = new AstSlice(makeRoot());
+    const slice = new DocumentSlice(makeRoot());
     slice.addBlock(2);
     slice.addBlock(4);
     slice.addBlock(1);
@@ -27,7 +27,7 @@ describe("AstSlice.addBlock", () => {
   });
 
   it("inserts into middle while keeping ascending sort", () => {
-    const slice = new AstSlice(makeRoot());
+    const slice = new DocumentSlice(makeRoot());
     slice.addBlock(2);
     slice.addBlock(6);
     slice.addBlock(4);
@@ -36,7 +36,7 @@ describe("AstSlice.addBlock", () => {
   });
 
   it("does not insert duplicate at start", () => {
-    const slice = new AstSlice(makeRoot());
+    const slice = new DocumentSlice(makeRoot());
     slice.addBlock(1);
     slice.addBlock(3);
     slice.addBlock(1);
@@ -45,7 +45,7 @@ describe("AstSlice.addBlock", () => {
   });
 
   it("does not insert duplicate in middle", () => {
-    const slice = new AstSlice(makeRoot());
+    const slice = new DocumentSlice(makeRoot());
     slice.addBlock(1);
     slice.addBlock(3);
     slice.addBlock(5);
@@ -55,7 +55,7 @@ describe("AstSlice.addBlock", () => {
   });
 
   it("does not insert duplicate at end", () => {
-    const slice = new AstSlice(makeRoot());
+    const slice = new DocumentSlice(makeRoot());
     slice.addBlock(1);
     slice.addBlock(3);
     slice.addBlock(3);
@@ -64,9 +64,9 @@ describe("AstSlice.addBlock", () => {
   });
 });
 
-describe("AstSlice.removeBlock", () => {
+describe("DocumentSlice.removeBlock", () => {
   it("removes existing index at start", () => {
-    const slice = new AstSlice(makeRoot());
+    const slice = new DocumentSlice(makeRoot());
     slice.addBlock(1);
     slice.addBlock(3);
     slice.addBlock(5);
@@ -77,7 +77,7 @@ describe("AstSlice.removeBlock", () => {
   });
 
   it("removes existing index in middle", () => {
-    const slice = new AstSlice(makeRoot());
+    const slice = new DocumentSlice(makeRoot());
     slice.addBlock(1);
     slice.addBlock(3);
     slice.addBlock(5);
@@ -88,7 +88,7 @@ describe("AstSlice.removeBlock", () => {
   });
 
   it("removes existing index at end", () => {
-    const slice = new AstSlice(makeRoot());
+    const slice = new DocumentSlice(makeRoot());
     slice.addBlock(1);
     slice.addBlock(3);
     slice.addBlock(5);
@@ -99,7 +99,7 @@ describe("AstSlice.removeBlock", () => {
   });
 
   it("is a no-op when index does not exist", () => {
-    const slice = new AstSlice(makeRoot());
+    const slice = new DocumentSlice(makeRoot());
     slice.addBlock(1);
     slice.addBlock(3);
 
@@ -109,10 +109,10 @@ describe("AstSlice.removeBlock", () => {
   });
 });
 
-describe("AstSlice.pruneEmptySections", () => {
+describe("DocumentSlice.pruneEmptySections", () => {
   it("is a no-op when indices is empty", () => {
     const root = makeRoot([{ type: "heading", depth: 2, children: [] }]);
-    const slice = new AstSlice(root);
+    const slice = new DocumentSlice(root);
 
     slice.pruneEmptySections();
 
@@ -122,7 +122,7 @@ describe("AstSlice.pruneEmptySections", () => {
   it("prunes a heading when it has no later selected block", () => {
     const h2 = { type: "heading", depth: 2, children: [] } as any;
     const root = makeRoot([h2]);
-    const slice = new AstSlice(root);
+    const slice = new DocumentSlice(root);
     slice.addBlock(0);
 
     slice.pruneEmptySections();
@@ -135,7 +135,7 @@ describe("AstSlice.pruneEmptySections", () => {
     const h2b = { type: "heading", depth: 2, children: [] } as any;
     const p = { type: "paragraph", children: [] } as any;
     const root = makeRoot([h2a, h2b, p]);
-    const slice = new AstSlice(root);
+    const slice = new DocumentSlice(root);
     slice.addBlock(0);
     slice.addBlock(1);
     slice.addBlock(2);
@@ -150,7 +150,7 @@ describe("AstSlice.pruneEmptySections", () => {
     const h2 = { type: "heading", depth: 2, children: [] } as any;
     const p = { type: "paragraph", children: [] } as any;
     const root = makeRoot([h3, h2, p]);
-    const slice = new AstSlice(root);
+    const slice = new DocumentSlice(root);
     slice.addBlock(0);
     slice.addBlock(1);
     slice.addBlock(2);
@@ -165,7 +165,7 @@ describe("AstSlice.pruneEmptySections", () => {
     const h3 = { type: "heading", depth: 3, children: [] } as any;
     const p = { type: "paragraph", children: [] } as any;
     const root = makeRoot([h2, h3, p]);
-    const slice = new AstSlice(root);
+    const slice = new DocumentSlice(root);
     slice.addBlock(0);
     slice.addBlock(1);
     slice.addBlock(2);
@@ -179,7 +179,7 @@ describe("AstSlice.pruneEmptySections", () => {
     const h2 = { type: "heading", depth: 2, children: [] } as any;
     const p = { type: "paragraph", children: [] } as any;
     const root = makeRoot([h2, p]);
-    const slice = new AstSlice(root);
+    const slice = new DocumentSlice(root);
     slice.addBlock(0);
     slice.addBlock(1);
 
@@ -192,7 +192,7 @@ describe("AstSlice.pruneEmptySections", () => {
     const h1 = { type: "heading", depth: 1, children: [] } as any;
     const h2 = { type: "heading", depth: 2, children: [] } as any;
     const root = makeRoot([h1, h2]);
-    const slice = new AstSlice(root);
+    const slice = new DocumentSlice(root);
     slice.addBlock(0);
     slice.addBlock(1);
 
@@ -206,7 +206,7 @@ describe("AstSlice.pruneEmptySections", () => {
     const h2 = { type: "heading", depth: 2, children: [] } as any;
     const p = { type: "paragraph", children: [] } as any;
     const root = makeRoot([h1, h2, p]);
-    const slice = new AstSlice(root);
+    const slice = new DocumentSlice(root);
     slice.addBlock(0);
     slice.addBlock(1);
     slice.addBlock(2);

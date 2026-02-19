@@ -3,52 +3,216 @@ import { describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
 import { AstSlice } from "./ast_slice.ts";
 
-describe("AstSlice", () => {
-  it("addBlock inserts in order and avoids duplicates", () => {
-    const root = { type: "root", children: [] } as any;
-    const s = new AstSlice(root);
+function makeRoot(children: any[] = []) {
+  return { type: "root", children } as any;
+}
 
-    s.addBlock(3);
-    s.addBlock(1);
-    s.addBlock(2);
-    s.addBlock(2);
+describe("AstSlice.addBlock", () => {
+  it("appends when index is greater than all existing", () => {
+    const slice = new AstSlice(makeRoot());
+    slice.addBlock(1);
+    slice.addBlock(3);
+    slice.addBlock(5);
 
-    assertEquals(s.indices, [1, 2, 3]);
+    assertEquals(slice.indices, [1, 3, 5]);
   });
 
-  it("removeBlock removes non-heading block only", () => {
-    const p0 = { type: "paragraph" } as any;
-    const p1 = { type: "paragraph" } as any;
-    const p2 = { type: "paragraph" } as any;
-    const root = { type: "root", children: [p0, p1, p2] } as any;
+  it("prepends when index is smaller than all existing", () => {
+    const slice = new AstSlice(makeRoot());
+    slice.addBlock(2);
+    slice.addBlock(4);
+    slice.addBlock(1);
 
-    const s = new AstSlice(root);
-    s.addBlock(0);
-    s.addBlock(1);
-    s.addBlock(2);
-
-    s.removeBlock(1);
-
-    assertEquals(s.indices, [0, 2]);
+    assertEquals(slice.indices, [1, 2, 4]);
   });
 
-  it("removeBlock removes a heading and its section blocks", () => {
-    const h0 = { type: "heading", depth: 2, children: [] } as any;
-    const p1 = { type: "paragraph" } as any;
-    const h_deeper = { type: "heading", depth: 3, children: [] } as any;
-    const p2 = { type: "paragraph" } as any;
-    const h1 = { type: "heading", depth: 2, children: [] } as any;
-    const p3 = { type: "paragraph" } as any;
+  it("inserts into middle while keeping ascending sort", () => {
+    const slice = new AstSlice(makeRoot());
+    slice.addBlock(2);
+    slice.addBlock(6);
+    slice.addBlock(4);
 
-    const root = { type: "root", children: [h0, p1, h_deeper, p2, h1, p3] } as any;
+    assertEquals(slice.indices, [2, 4, 6]);
+  });
 
-    const s = new AstSlice(root);
-    // add in order to simulate typical usage
-    for (let i = 0; i < root.children.length; i++) s.addBlock(i);
+  it("does not insert duplicate at start", () => {
+    const slice = new AstSlice(makeRoot());
+    slice.addBlock(1);
+    slice.addBlock(3);
+    slice.addBlock(1);
 
-    s.removeBlock(0);
+    assertEquals(slice.indices, [1, 3]);
+  });
 
-    // should remove h0, p1, h_deeper, p2 (indices 0..3)
-    assertEquals(s.indices, [4, 5]);
+  it("does not insert duplicate in middle", () => {
+    const slice = new AstSlice(makeRoot());
+    slice.addBlock(1);
+    slice.addBlock(3);
+    slice.addBlock(5);
+    slice.addBlock(3);
+
+    assertEquals(slice.indices, [1, 3, 5]);
+  });
+
+  it("does not insert duplicate at end", () => {
+    const slice = new AstSlice(makeRoot());
+    slice.addBlock(1);
+    slice.addBlock(3);
+    slice.addBlock(3);
+
+    assertEquals(slice.indices, [1, 3]);
+  });
+});
+
+describe("AstSlice.removeBlock", () => {
+  it("removes existing index at start", () => {
+    const slice = new AstSlice(makeRoot());
+    slice.addBlock(1);
+    slice.addBlock(3);
+    slice.addBlock(5);
+
+    slice.removeBlock(1);
+
+    assertEquals(slice.indices, [3, 5]);
+  });
+
+  it("removes existing index in middle", () => {
+    const slice = new AstSlice(makeRoot());
+    slice.addBlock(1);
+    slice.addBlock(3);
+    slice.addBlock(5);
+
+    slice.removeBlock(3);
+
+    assertEquals(slice.indices, [1, 5]);
+  });
+
+  it("removes existing index at end", () => {
+    const slice = new AstSlice(makeRoot());
+    slice.addBlock(1);
+    slice.addBlock(3);
+    slice.addBlock(5);
+
+    slice.removeBlock(5);
+
+    assertEquals(slice.indices, [1, 3]);
+  });
+
+  it("is a no-op when index does not exist", () => {
+    const slice = new AstSlice(makeRoot());
+    slice.addBlock(1);
+    slice.addBlock(3);
+
+    slice.removeBlock(2);
+
+    assertEquals(slice.indices, [1, 3]);
+  });
+});
+
+describe("AstSlice.pruneEmptySections", () => {
+  it("is a no-op when indices is empty", () => {
+    const root = makeRoot([{ type: "heading", depth: 2, children: [] }]);
+    const slice = new AstSlice(root);
+
+    slice.pruneEmptySections();
+
+    assertEquals(slice.indices, []);
+  });
+
+  it("prunes a heading when it has no later selected block", () => {
+    const h2 = { type: "heading", depth: 2, children: [] } as any;
+    const root = makeRoot([h2]);
+    const slice = new AstSlice(root);
+    slice.addBlock(0);
+
+    slice.pruneEmptySections();
+
+    assertEquals(slice.indices, []);
+  });
+
+  it("prunes a heading when next selected block is heading of same depth", () => {
+    const h2a = { type: "heading", depth: 2, children: [] } as any;
+    const h2b = { type: "heading", depth: 2, children: [] } as any;
+    const p = { type: "paragraph", children: [] } as any;
+    const root = makeRoot([h2a, h2b, p]);
+    const slice = new AstSlice(root);
+    slice.addBlock(0);
+    slice.addBlock(1);
+    slice.addBlock(2);
+
+    slice.pruneEmptySections();
+
+    assertEquals(slice.indices, [1, 2]);
+  });
+
+  it("prunes a heading when next selected block is heading of shallower depth", () => {
+    const h3 = { type: "heading", depth: 3, children: [] } as any;
+    const h2 = { type: "heading", depth: 2, children: [] } as any;
+    const p = { type: "paragraph", children: [] } as any;
+    const root = makeRoot([h3, h2, p]);
+    const slice = new AstSlice(root);
+    slice.addBlock(0);
+    slice.addBlock(1);
+    slice.addBlock(2);
+
+    slice.pruneEmptySections();
+
+    assertEquals(slice.indices, [1, 2]);
+  });
+
+  it("keeps a heading when next selected block is deeper heading", () => {
+    const h2 = { type: "heading", depth: 2, children: [] } as any;
+    const h3 = { type: "heading", depth: 3, children: [] } as any;
+    const p = { type: "paragraph", children: [] } as any;
+    const root = makeRoot([h2, h3, p]);
+    const slice = new AstSlice(root);
+    slice.addBlock(0);
+    slice.addBlock(1);
+    slice.addBlock(2);
+
+    slice.pruneEmptySections();
+
+    assertEquals(slice.indices, [0, 1, 2]);
+  });
+
+  it("keeps a heading when next selected block is non-heading content", () => {
+    const h2 = { type: "heading", depth: 2, children: [] } as any;
+    const p = { type: "paragraph", children: [] } as any;
+    const root = makeRoot([h2, p]);
+    const slice = new AstSlice(root);
+    slice.addBlock(0);
+    slice.addBlock(1);
+
+    slice.pruneEmptySections();
+
+    assertEquals(slice.indices, [0, 1]);
+  });
+
+  it("cascades pruning for selected headings with no selected content", () => {
+    const h1 = { type: "heading", depth: 1, children: [] } as any;
+    const h2 = { type: "heading", depth: 2, children: [] } as any;
+    const root = makeRoot([h1, h2]);
+    const slice = new AstSlice(root);
+    slice.addBlock(0);
+    slice.addBlock(1);
+
+    slice.pruneEmptySections();
+
+    assertEquals(slice.indices, []);
+  });
+
+  it("keeps nested headings when selected content exists under them", () => {
+    const h1 = { type: "heading", depth: 1, children: [] } as any;
+    const h2 = { type: "heading", depth: 2, children: [] } as any;
+    const p = { type: "paragraph", children: [] } as any;
+    const root = makeRoot([h1, h2, p]);
+    const slice = new AstSlice(root);
+    slice.addBlock(0);
+    slice.addBlock(1);
+    slice.addBlock(2);
+
+    slice.pruneEmptySections();
+
+    assertEquals(slice.indices, [0, 1, 2]);
   });
 });

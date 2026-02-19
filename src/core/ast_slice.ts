@@ -16,29 +16,28 @@ export class AstSlice {
   }
 
   removeBlock(index: number) {
-    const removeIndex = this.indices.findIndex((i) => i === index);
+    const spliceStart = this.indices.findIndex((v) => v === index);
 
-    if (removeIndex === -1) return;
-
-    const block = this.ast.children[removeIndex];
-
-    if (block.type !== "heading") {
-      this.indices.splice(removeIndex, 1);
-      return;
+    if (spliceStart !== -1) {
+      this.indices.splice(spliceStart, 1);
     }
+  }
 
-    let deleteCount = 1;
+  pruneEmptySections() {
+    for (let i = this.indices.length - 1; i >= 0; i--) {
+      const blockIndex = this.indices[i];
+      const block = this.ast.children[blockIndex];
 
-    for (let i = removeIndex + 1; i < this.indices.length; i++) {
-      const nextBlock = this.ast.children[i];
+      if (block.type !== "heading") continue;
 
-      if (nextBlock.type === "heading" && nextBlock.depth <= block.depth) {
-        break;
+      const prevBlockIndex = this.indices[i + 1];
+      const prevBlock = this.ast.children[prevBlockIndex];
+      const isEmpty = !prevBlock ||
+        (prevBlock.type === "heading" && prevBlock.depth <= block.depth);
+
+      if (isEmpty) {
+        this.indices.splice(i, 1);
       }
-
-      deleteCount++;
     }
-
-    this.indices.splice(removeIndex, deleteCount);
   }
 }

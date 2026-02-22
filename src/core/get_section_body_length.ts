@@ -1,13 +1,13 @@
 import type { Root } from "mdast";
 import { iterSectionBlocks } from "./iter_section_blocks.ts";
 
-export type GetSectionContentLengthInput = {
+export type GetSectionBodyLengthInput = {
   ast: Root;
   headingIndex: number;
 };
 
-export function getSectionContentLength(
-  input: GetSectionContentLengthInput,
+export function getSectionBodyLength(
+  input: GetSectionBodyLengthInput,
 ): number {
   const blocks = Array.from(iterSectionBlocks(input));
   const start = blocks.at(0)?.[0]?.position?.start.offset ?? 0;

@@ -1,9 +1,13 @@
-import type { Root } from "mdast";
+import type { Root, RootContent } from "mdast";
 
 export class DocumentSlice {
   readonly indices: number[] = [];
 
   constructor(readonly ast: Root) {}
+
+  get blocks(): RootContent[] {
+    return this.indices.map((i) => this.ast.children[i]);
+  }
 
   addBlock(index: number) {
     const insertIndex = this.indices.findIndex((v) => v > index);

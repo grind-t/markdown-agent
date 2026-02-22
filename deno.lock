@@ -8,6 +8,7 @@
     "jsr:@std/async@^1.1.0": "1.1.1",
     "jsr:@std/cli@^1.0.25": "1.0.26",
     "jsr:@std/cli@^1.0.27": "1.0.27",
+    "jsr:@std/collections@^1.1.6": "1.1.6",
     "jsr:@std/data-structures@^1.0.10": "1.0.10",
     "jsr:@std/encoding@^1.0.10": "1.0.10",
     "jsr:@std/fmt@^1.0.8": "1.0.9",
@@ -54,6 +55,9 @@
     },
     "@std/cli@1.0.27": {
       "integrity": "eba97edd0891871a7410e835dd94b3c260c709cca5983df2689c25a71fbe04de"
+    },
+    "@std/collections@1.1.6": {
+      "integrity": "b458160ce65ea5ad35da05d0a5cbee4b583677c8b443a10d7beb0c4ac63f2baa"
     },
     "@std/data-structures@1.0.10": {
       "integrity": "f574f86b0e07c69b9edc555fcc814b57d29258bad39fd5a34ba8a80ecf033cfe"
@@ -978,6 +982,7 @@
       "jsr:@grind-t/agents-as-cli@0.1",
       "jsr:@grind-t/agents-as-ui@~0.1.2",
       "jsr:@std/assert@1",
+      "jsr:@std/collections@^1.1.6",
       "jsr:@std/testing@^1.0.17",
       "npm:@openai/agents@~0.4.4",
       "npm:@types/mdast@^4.0.4",

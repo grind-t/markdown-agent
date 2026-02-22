@@ -1,10 +1,10 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
 import type { Text } from "mdast";
-import { getBlockContent } from "./get_block_content.ts";
+import { getBlockString } from "./get_block_string.ts";
 
-describe("getBlockContent", () => {
-  it("extracts content from block at document start", () => {
+describe("getBlockString", () => {
+  it("extracts string at document start", () => {
     const markdown = "Hello\nWorld";
     const start = 0;
     const end = 5; // "Hello"
@@ -18,10 +18,10 @@ describe("getBlockContent", () => {
       },
     } as Text;
 
-    assertEquals(getBlockContent(markdown, block), "Hello");
+    assertEquals(getBlockString(markdown, block), "Hello");
   });
 
-  it("extracts content from a block in the middle of the document", () => {
+  it("extracts string in the middle of the document", () => {
     const markdown = "Line1\nLine2\nLine3";
     const start = 6; // start of "Line2"
     const end = 11; // end of "Line2"
@@ -35,10 +35,10 @@ describe("getBlockContent", () => {
       },
     } as Text;
 
-    assertEquals(getBlockContent(markdown, block), "Line2");
+    assertEquals(getBlockString(markdown, block), "Line2");
   });
 
-  it("extracts content when block spans entire document", () => {
+  it("extracts string when block spans entire document", () => {
     const markdown = "Full document content";
     const start = 0;
     const end = markdown.length;
@@ -52,7 +52,7 @@ describe("getBlockContent", () => {
       },
     } as Text;
 
-    assertEquals(getBlockContent(markdown, block), "Full document content");
+    assertEquals(getBlockString(markdown, block), "Full document content");
   });
 
   it("returns empty string for zero-length block", () => {
@@ -69,10 +69,10 @@ describe("getBlockContent", () => {
       },
     } as Text;
 
-    assertEquals(getBlockContent(markdown, block), "");
+    assertEquals(getBlockString(markdown, block), "");
   });
 
-  it("extracts content at document end", () => {
+  it("extracts string at document end", () => {
     const markdown = "prefixsuffix";
     const start = 6; // start of "suffix"
     const end = markdown.length;
@@ -86,6 +86,6 @@ describe("getBlockContent", () => {
       },
     } as Text;
 
-    assertEquals(getBlockContent(markdown, block), "suffix");
+    assertEquals(getBlockString(markdown, block), "suffix");
   });
 });

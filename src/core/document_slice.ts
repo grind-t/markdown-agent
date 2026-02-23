@@ -21,6 +21,15 @@ export class DocumentSlice {
     return this.indices.map((i) => this.ast.children[i]);
   }
 
+  get length(): number {
+    const startBlock = this.ast.children[this.indices.at(0) ?? -1];
+    const endBlock = this.ast.children[this.indices.at(-1) ?? -1];
+    const startOffset = startBlock?.position?.start?.offset ?? 0;
+    const endOffset = endBlock?.position?.end?.offset ?? 0;
+
+    return endOffset - startOffset;
+  }
+
   addBlock(index: number) {
     const insertIndex = this.indices.findIndex((v) => v > index);
     const spliceStart = insertIndex === -1 ? this.indices.length : insertIndex;

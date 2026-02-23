@@ -1,6 +1,6 @@
 import { getDocumentDepth } from "./get_document_depth.ts";
 import { getBlockString } from "./get_block_string.ts";
-import { getSectionBodyLength } from "./get_section_body_length.ts";
+import { getSectionBody } from "./get_section_body.ts";
 import type { DocumentSlice } from "./document_slice.ts";
 
 export type GetDocumentPreviewInput = {
@@ -34,7 +34,7 @@ export function getDocumentPreview(
     const headingString = getBlockString(markdown, block);
 
     if (isLastLevel) {
-      const length = getSectionBodyLength({
+      const { length } = getSectionBody({
         ast: slice.ast,
         headingIndex: index,
       });

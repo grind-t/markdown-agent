@@ -1,14 +1,16 @@
+import type { Root } from "mdast";
+import { DocumentSlice } from "./document_slice.ts";
 import { assert } from "@std/assert";
-import type { Root, RootContent } from "mdast";
 
-export type IterSectionBlocksInput = {
+export type GetSectionBodyInput = {
   ast: Root;
   headingIndex: number;
 };
 
-export function* iterSectionBlocks(
-  { ast, headingIndex }: IterSectionBlocksInput,
-): Generator<[RootContent, number]> {
+export function getSectionBody(
+  { ast, headingIndex }: GetSectionBodyInput,
+): DocumentSlice {
+  const slice = new DocumentSlice(ast);
   const heading = ast.children[headingIndex];
 
   assert(heading.type === "heading");
@@ -20,6 +22,8 @@ export function* iterSectionBlocks(
       break;
     }
 
-    yield [block, i];
+    slice.addBlock(i);
   }
+
+  return slice;
 }

@@ -1,5 +1,5 @@
 {
-    "name": "@grind-t/markdown-agent",
+    "name": "@grind-t/markdown-db",
     "version": "0.1.0",
     "license": "MIT",
     "exports": "./src/main.ts",

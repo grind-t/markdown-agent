@@ -11,22 +11,21 @@ const ScoreSchema = z.union([
 
 export type Score = z.infer<typeof ScoreSchema>;
 export type ScoredElements = Record<string, Score>;
+export type Scorer = (
+  prompt: string,
+  outputSchema: z.ZodType<ScoredElements>,
+) => Promise<ScoredElements>;
 
 export type ScoreElementsInput = {
   markdown: string;
   slice: DocumentSlice;
   query: string;
-  scorer: (
-    prompt: string,
-    outputSchema: z.ZodType<ScoredElements>,
-  ) => ScoreElementsOutput;
+  scorer: Scorer;
 };
-
-export type ScoreElementsOutput = Promise<ScoredElements>;
 
 export function scoreElements(
   { markdown, slice, query, scorer }: ScoreElementsInput,
-): ScoreElementsOutput {
+): Promise<ScoredElements> {
   const depth = getDocumentDepth(slice.blocks);
   const preview = getDocumentPreview({ markdown, slice });
   const outputShape = {} as Record<string, typeof ScoreSchema>;

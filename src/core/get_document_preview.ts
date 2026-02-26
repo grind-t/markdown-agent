@@ -1,7 +1,6 @@
 import { getDocumentDepth } from "./get_document_depth.ts";
-import { getBlockString } from "./get_block_string.ts";
-import { getSectionBody } from "./get_section_body.ts";
 import type { DocumentSlice } from "./document_slice.ts";
+import { getElementString } from "./get_element_string.ts";
 
 export type GetDocumentPreviewInput = {
   markdown: string;
@@ -19,30 +18,15 @@ export function getDocumentPreview(
     const block = slice.ast.children[index];
     const isLastLevel = level === depth;
 
-    if (block.type !== "heading") {
-      const fullString = getBlockString(markdown, block);
-      const isPreview = isLastLevel && fullString.length > 80;
-      const string = isPreview ? fullString.slice(0, 80) + "..." : fullString;
-      const comment = isPreview
-        ? `<!-- id: ${index}, length: ${fullString.length} -->`
-        : `<!-- id: ${index} -->`;
+    result.push(getElementString({
+      markdown,
+      ast: slice.ast,
+      index,
+      isLastLevel,
+    }));
 
-      result.push(`${string}\n${comment}`);
-      continue;
-    }
-
-    const headingString = getBlockString(markdown, block);
-
-    if (isLastLevel) {
-      const { length } = getSectionBody({
-        ast: slice.ast,
-        headingIndex: index,
-      });
-      const comment = `<!-- id: ${index}, length: ${length} -->`;
-      result.push(`${headingString}\n\n${comment}`);
-    } else {
+    if (!isLastLevel && block.type === "heading") {
       level = block.depth + 1;
-      result.push(headingString);
     }
   }
 

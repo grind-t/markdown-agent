@@ -1,7 +1,14 @@
 import type { RootContent } from "mdast";
-import { maxOf } from "@std/collections";
 
 export function getDocumentDepth(blocks: RootContent[]): number {
-  const headings = blocks.filter((v) => v.type === "heading");
-  return maxOf(headings, (heading) => heading.depth) ?? 0;
+  return blocks.reduce((acc, block, i) => {
+    if (block.type !== "heading") return acc;
+
+    const nextBlock = blocks[i + 1];
+    const hasBody = nextBlock &&
+      (nextBlock.type !== "heading" || nextBlock.depth > block.depth);
+    const depth = hasBody ? block.depth + 1 : block.depth;
+
+    return Math.max(depth, acc);
+  }, 0);
 }

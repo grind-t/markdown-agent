@@ -4,7 +4,6 @@
     "jsr:@std/assert@1": "1.0.19",
     "jsr:@std/assert@^1.0.17": "1.0.19",
     "jsr:@std/async@^1.1.0": "1.1.1",
-    "jsr:@std/collections@^1.1.6": "1.1.6",
     "jsr:@std/data-structures@^1.0.10": "1.0.10",
     "jsr:@std/fs@^1.0.22": "1.0.22",
     "jsr:@std/internal@^1.0.12": "1.0.12",
@@ -24,9 +23,6 @@
     },
     "@std/async@1.1.1": {
       "integrity": "8a79beb3378cc229ce65ba2c746cfd03e4855ddd891d1eb6b9e32128e0d5339c"
-    },
-    "@std/collections@1.1.6": {
-      "integrity": "b458160ce65ea5ad35da05d0a5cbee4b583677c8b443a10d7beb0c4ac63f2baa"
     },
     "@std/data-structures@1.0.10": {
       "integrity": "f574f86b0e07c69b9edc555fcc814b57d29258bad39fd5a34ba8a80ecf033cfe"
@@ -319,7 +315,6 @@
   "workspace": {
     "dependencies": [
       "jsr:@std/assert@1",
-      "jsr:@std/collections@^1.1.6",
       "jsr:@std/testing@^1.0.17",
       "npm:@types/mdast@^4.0.4",
       "npm:mdast-util-from-markdown@^2.0.2",

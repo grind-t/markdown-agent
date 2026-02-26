@@ -15,19 +15,19 @@ function renderPreview(markdown: string, indices: number[]): string {
   return getDocumentPreview({ markdown, slice });
 }
 
-describe("getDocumentPreview depth=1", () => {
-  it("renders last-level heading metadata and short paragraph", () => {
+describe("getDocumentPreview single heading with body", () => {
+  it("renders heading text and regular short paragraph block", () => {
     const markdown = "# Title\n\nShort paragraph.";
 
     const result = renderPreview(markdown, [0, 1]);
 
     assertEquals(
       result,
-      "# Title\n\n<!-- id: 0, length: 16 -->\n\nShort paragraph.\n<!-- id: 1 -->",
+      "# Title\n\nShort paragraph.\n<!-- id: 1 -->",
     );
   });
 
-  it("truncates a paragraph longer than 80 chars", () => {
+  it("truncates long paragraph block at last level", () => {
     const long = "a".repeat(81);
     const markdown = `# T\n\n${long}`;
 
@@ -35,24 +35,24 @@ describe("getDocumentPreview depth=1", () => {
 
     assertEquals(
       result,
-      `# T\n\n<!-- id: 0, length: 81 -->\n\n${"a".repeat(80)}...\n<!-- id: 1, length: 81 -->`,
+      `# T\n\n${"a".repeat(80)}...\n<!-- id: 1, length: 81 -->`,
     );
   });
 });
 
-describe("getDocumentPreview depth=2", () => {
-  it("renders non-last and last-level headings correctly", () => {
+describe("getDocumentPreview nested heading sections", () => {
+  it("renders heading chain and regular body at last level", () => {
     const markdown = "# H1\n\n## H2\n\nBody.";
 
     const result = renderPreview(markdown, [0, 1, 2]);
 
     assertEquals(
       result,
-      "# H1\n\n## H2\n\n<!-- id: 1, length: 5 -->\n\nBody.\n<!-- id: 2 -->",
+      "# H1\n\n## H2\n\nBody.\n<!-- id: 2 -->",
     );
   });
 
-  it("does not truncate long non-heading before reaching last level", () => {
+  it("keeps long non-heading block untruncated before last level", () => {
     const intro = "b".repeat(90);
     const markdown = `${intro}\n\n# H1\n\n## H2`;
 
@@ -65,19 +65,19 @@ describe("getDocumentPreview depth=2", () => {
   });
 });
 
-describe("getDocumentPreview depth=3", () => {
-  it("renders heading ladder and deepest section preview", () => {
+describe("getDocumentPreview deeper heading ladder", () => {
+  it("renders deep heading ladder and last-level body block", () => {
     const markdown = "# H1\n\n## H2\n\n### H3\n\nDeep.";
 
     const result = renderPreview(markdown, [0, 1, 2, 3]);
 
     assertEquals(
       result,
-      "# H1\n\n## H2\n\n### H3\n\n<!-- id: 2, length: 5 -->\n\nDeep.\n<!-- id: 3 -->",
+      "# H1\n\n## H2\n\n### H3\n\nDeep.\n<!-- id: 3 -->",
     );
   });
 
-  it("truncates only when block is at current last level", () => {
+  it("truncates only blocks that appear at the computed last level", () => {
     const intro = "c".repeat(90);
     const deep = "d".repeat(81);
     const markdown = `${intro}\n\n# H1\n\n## H2\n\n### H3\n\n${deep}`;
@@ -86,7 +86,7 @@ describe("getDocumentPreview depth=3", () => {
 
     assertEquals(
       result,
-      `${intro}\n<!-- id: 0 -->\n\n# H1\n\n## H2\n\n### H3\n\n<!-- id: 3, length: 81 -->\n\n${"d".repeat(80)}...\n<!-- id: 4, length: 81 -->`,
+      `${intro}\n<!-- id: 0 -->\n\n# H1\n\n## H2\n\n### H3\n\n${"d".repeat(80)}...\n<!-- id: 4, length: 81 -->`,
     );
   });
 });

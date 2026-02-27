@@ -1,6 +1,5 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
-import { fromMarkdown } from "mdast-util-from-markdown";
 import OpenAI from "openai";
 import { zodTextFormat } from "openai/helpers/zod";
 import type z from "zod";

@@ -1,7 +1,4 @@
 import z from "zod";
-import type { DocumentSlice } from "./document_slice.ts";
-import { getDocumentDepth } from "./get_document_depth.ts";
-import { getDocumentPreview } from "./get_document_preview.ts";
 
 const ScoreSchema = z.union([
   z.literal("low"),
@@ -17,26 +14,20 @@ export type Scorer = (
 ) => Promise<ScoredElements>;
 
 export type ScoreElementsInput = {
-  markdown: string;
-  slice: DocumentSlice;
+  ids: string[];
+  document: string;
   query: string;
   scorer: Scorer;
 };
 
 export function scoreElements(
-  { markdown, slice, query, scorer }: ScoreElementsInput,
+  { ids, document, query, scorer }: ScoreElementsInput,
 ): Promise<ScoredElements> {
-  const depth = getDocumentDepth(slice.blocks);
-  const preview = getDocumentPreview({ markdown, slice });
-  const outputShape = {} as Record<string, typeof ScoreSchema>;
-
-  for (const index of slice.indices) {
-    const block = slice.ast.children[index];
-
-    if (block.type !== "heading" || block.depth === depth) {
-      outputShape[String(index)] = ScoreSchema;
-    }
-  }
+  const outputShape = ids.reduce(
+    (acc, id) => ({ ...acc, [id]: ScoreSchema }),
+    {} as Record<string, typeof ScoreSchema>,
+  );
+  const outputSchema = z.object(outputShape);
 
   const prompt = `
     <context>
@@ -59,11 +50,9 @@ export function scoreElements(
     </user-query>
 
     <document>
-      ${preview}
+      ${document}
     </document>
   `;
-
-  const outputSchema = z.object(outputShape);
 
   return scorer(prompt, outputSchema);
 }

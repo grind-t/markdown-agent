@@ -54,7 +54,7 @@ for (let i = 0; i < ast.children.length; i++) {
 
 const markdown = sections.flatMap((v) => v.list).join("\n\n");
 
-await Deno.writeTextFile("./deno_docs.md", markdown);
+await Deno.writeTextFile("./playground-in.md", markdown);
 
 function tab(content: string) {
   return content.split("\n").map((line) =>

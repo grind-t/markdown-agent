@@ -19,8 +19,11 @@ const scorer: Scorer = async (prompt, outputSchema) => {
   return response.output_parsed ?? {};
 };
 
-const md = await fetch("https://docs.deno.com/llms.txt").then((v) => v.text());
-const result = await queryMarkdown(md, "How do i deploy deno app?", scorer);
+const md = await Deno.readTextFile("./playground-in.md");
+const result = await queryMarkdown(
+  md,
+  "You are given the Deno documentation; find all the relevant information about how to deploy a Deno application.",
+  scorer,
+);
 
-await Deno.writeTextFile("./playground-in.md", md);
 await Deno.writeTextFile("./playgorund-out.md", result);

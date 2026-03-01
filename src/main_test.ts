@@ -35,9 +35,12 @@ B body.`;
 
     const result = await queryMarkdown(markdown, "A body", scorer);
 
-    assertEquals(result, `# A
+    assertEquals(
+      result,
+      `# A
 
-A body.`);
+A body.`,
+    );
     assertEquals(getCallCount(), 3);
   });
 
@@ -62,11 +65,14 @@ B body.`;
 
     const result = await queryMarkdown(markdown, "A1 body", scorer);
 
-    assertEquals(result, `# A
+    assertEquals(
+      result,
+      `# A
 
 ## A1
 
-A1 body.`);
+A1 body.`,
+    );
     assertEquals(getCallCount(), 4);
   });
 
@@ -80,14 +86,11 @@ A body.
 B body.`;
     const { scorer, getCallCount } = makeQueuedScorer([
       { "0": "low", "2": "low" },
-      {},
     ]);
 
     const result = await queryMarkdown(markdown, "nothing relevant", scorer);
 
-    assertEquals(result, `# A
-
-# B`);
-    assertEquals(getCallCount(), 2);
+    assertEquals(result, "Nothing relevant");
+    assertEquals(getCallCount(), 1);
   });
 });

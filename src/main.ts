@@ -48,13 +48,21 @@ export async function queryMarkdown(
       scorer,
     });
 
-    const lowElements = Object.entries(scoredElements).filter((
+    const discardElements = Object.entries(scoredElements).filter((
       [, score],
-    ) => score === "low");
+    ) => score !== "high");
 
-    for (const [id] of lowElements) {
+    for (const [id] of discardElements) {
       const index = Number(id);
       slice.removeBlock(index);
+    }
+
+    if (isLastStep) {
+      slice.pruneEmptySections();
+    }
+
+    if (!slice.indices.length) {
+      return "Nothing relevant";
     }
 
     if (isLastStep) {

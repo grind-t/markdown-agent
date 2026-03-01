@@ -1,18 +1,17 @@
 [
     {
         "adapter": "JavaScript",
-        "label": "Deno",
+        "label": "Playground",
         "request": "launch",
         "type": "pwa-node",
         "cwd": "$ZED_WORKTREE_ROOT",
         "runtimeExecutable": "deno",
         "runtimeArgs": [
-            "test",
-            "--allow-all",
-            "--env-file=.env",
+            "run",
+            "-A",
+            "--env-file",
             "--inspect-wait",
-            "--trace-leaks",
-            "./src/core/score_elements_test.ts"
+            "./playground.ts"
         ],
         "attachSimplePort": 9229
     }

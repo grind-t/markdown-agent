@@ -38,7 +38,7 @@ Note: the output filename is currently `playgorund-out.md` (matching the existin
 ## Use Cases
 
 - Large markdown file semantic search (for files like `llms-full.txt`)
-- Knowledge bases for AI agents
+- Knowledge bases and memory for AI agents
 - Dynamic RAG
 
 ## License
